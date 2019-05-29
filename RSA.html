@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<script type="text/javascript">
+		var n;var p,q,pq;
+		var msg,puk,prk;
+		var cip;
+		function EDcrypt(b,e,m)//To find m raised to e mod n and c raised to d mod n 
+		{
+			var c; c=1;
+			for(var i=1; i<=e; i++)
+			{ c = ((c*b)%m);
+			}
+			 return c;
+		}
+		function encrpt()// prompt user for p,q and e, parse the plain text 
+		{
+			var pt;
+			p=prompt("Enter the value for p");
+			q=prompt("Enter the value q");
+			pq=p*q;
+			pt=document.Form.plaintxt.value;
+			n=pt.length;
+			var ptxtno = new Array(n); cip=new Array(n);
+			for(var i=0;i<n;i++)
+			{	
+				var t;
+				t=pt.charCodeAt(i);
+				ptxtno[i]=t%97;
+			}
+			puk=prompt("Enter the Public Key!!(e)");
+			document.Form.alphatxt.value=ptxtno;
+			m=pq;
+			var tmp = " "
+			for(var i=0;i<n;i++)
+			{
+				var z;z=ptxtno[i];
+				cip[i] = EDcrypt(z,puk,m);
+				tmp =tmp + cip[i] + " " ;
+			}
+			document.Form.ciptxt.value=tmp;
+		}
+		function gene()// To generate d
+		{
+			pq=(p-1)*(q-1);
+			for(var i=1;i<pq;i++)
+			if(  ((i*puk)%pq) ==1) 
+			return i;
+		}
+		function decrypt()
+		{
+			prk = gene();
+			alert("The value of d -->"+prk);
+			var tmp = new Array(n); var t = "";
+			for(var i=0;i<n;i++)
+			{
+				tmp[i] = EDcrypt(cip[i],prk,m);
+				if(tmp[i]+97>122)
+					t = t + " ";
+				else
+					t = t + String.fromCharCode(tmp[i]+97);
+			}
+			document.Form.pntxt.value = t;
+		}
+	</script>
+<style type="text/css">
+<!--
+.style1 {
+	font-size: 24px;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+
+<body>
+<div align="center" class="style1">RSA ENCRYPTION AND DECRYPTION</div>
+<form id="Form" name="Form" > <hr />
+  <label><br />
+  <br />
+  Enter Plain Text  
+  <input type="text" name="plaintxt" id="plaintx" /> 
+  </label>
+  <p>
+    <label>
+    <input name="Encrypt" type="Button"  value="ENCRYPT" onclick="encrpt()" />
+    </label>
+    <label>
+    <input type="reset" name="Reset"  value="RESET" />
+    </label>
+  </p>
+  <p>Alphabet char position    &nbsp; &nbsp; &nbsp; 
+    <label>
+    <input type="text" name="alphatxt" id="alphatxt" />
+    </label>
+  </p>  
+  <p>Cipherd Text (in numbers)   
+  
+    <input name="ciptxt" type="text" id="ciptxt" />
+  </p>
+  <p>&nbsp;</p><hr />
+  
+  <p>
+    <label>
+    <input type="Button" name="Decrypt" value="Decrypt" onclick="decrypt()" />
+    </label>
+  </p>
+  <p>
+    <input type="text" name="pntxt" id="textfield" />
+  </p>
+  <p>&nbsp;  </p>
+</form>
+</body>
+</html>
